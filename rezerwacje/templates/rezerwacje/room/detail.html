@@ -1,0 +1,36 @@
+{% extends "../base.html" %}
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            Room detail
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ room.name }} in {{ room.building.name }}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Building:</strong> {{ room.building.name }}</li>
+                <li class="list-group-item"><strong>Type:</strong> {{ room.type.name }}</li>
+                <li class="list-group-item"><strong>Maximum number of people:</strong> {{ room.maxNumberOfPeople.numerator }}</li>
+                <li class="list-group-item"><strong>Software:</strong>
+                    {% for software in room.softwares.all %}
+                        {{ software.name }}
+                    {% empty %}
+                        <p>There is no software</p>
+                    {% endfor %}
+
+                </li>
+
+                <li class="list-group-item"><strong>Equipment:</strong>
+                    {% for equipment in room.equipments.all %}
+                        {{ equipment.name }}
+                    {% empty %}
+                        <p>There is no equipment</p>
+                    {% endfor %}
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+{% endblock %}

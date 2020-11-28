@@ -1,0 +1,108 @@
+{% extends "../base.html" %}
+
+{% block content %}
+    <h3>Your Reservations</h3>
+        <form method="get" action="my_reservation">
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label for="input-group">Room name</label>
+                <div class="input-group">
+
+                    <input id="room_name" class="form-control py-2 border-right-0 border" type="search" name="room_name" placeholder="Room name" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+             <div class="form-group col-md-4">
+            <label for="type">Reservation Type</label>
+            <select id="type" class="form-control" name="type">
+              <option selected>Choose...</option>
+              {% for type in types %}
+              <option value="{{ type.name }}">{{ type.name }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+            <div class="form-group col-md-4">
+            <label for="software">Reservation status</label>
+            <select id="status" class="form-control" name="status">
+              <option selected>Choose...</option>
+              {% for status in status_options %}
+              <option value="{{ status }}">{{ status }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+    </form>
+    <hr />
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+
+            <th scope="col">Room</th>
+            <th scope="col">Start date</th>
+            <th scope="col">End Date</th>
+            <th scope="col"> Type </th>
+            <th scope="col"> Status</th>
+            <th scope="col"> </th>
+
+        </tr>
+        </thead>
+        <tbody>
+            {% for Reservation in reservations %}
+                <tr>
+                    <th scope="row">{{ Reservation.room.name }}</th>
+                    <td>{{ Reservation.start }}</td>
+                    <td>{{ Reservation.end }}</td>
+                    <td>{{ Reservation.type }}</td>
+                    <td> {{ Reservation.status }}</td>
+                    <td>
+                        {% if Reservation.status == "waiting"  %}
+                            <a href="{% url 'rezerwacje:cancel_reservation' pk=Reservation.id %}" class="btn btn-danger" role="button" >Cancel reservation</a>
+                        <!-- Button trigger modal -->
+                        {% else %}
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default{{Reservation.pk}}">
+                            Check Comment
+                        </button>
+
+
+                        {% endif %}
+                    </td>
+
+
+                </tr>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-default{{Reservation.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ Reservation.comment }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

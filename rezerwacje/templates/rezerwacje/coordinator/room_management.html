@@ -1,0 +1,83 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <h1 class="display-4">Room management</h1>
+            <p class="lead"></p>
+            <hr class="my-4">
+            <p class="lead">
+                <a href="{% url 'rezerwacje:coordinator_management'%}" class="btn btn-primary btn-lg" role="button" disabled="true" >Reservation management</a>
+                <a href="{% url 'rezerwacje:new_room'%}" class="btn btn-primary btn-lg" role="button" aria-pressed="true">Add new room</a>
+
+            </p>
+    </div>
+    <h3>Filter rooms to manage</h3>
+    <form method="get" action="coordinator">
+        <div class="form-row">
+            <div class="form-group col-4"><label for="input-group">Room name</label>
+
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="name" placeholder="Room name" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+          <div class="form-group col-md-4">
+            <label for="building">Building</label>
+            <select id="building" class="form-control" name="building">
+              <option selected>Choose...</option>
+              {% for building in buildings %}
+              <option value="{{ building.name }}">{{ building.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+            <div class="form-group col-md-4">
+            <label for="type">Room type</label>
+            <select id="type" class="form-control" name="room_type">
+              <option selected>Choose...</option>
+              {% for type in types %}
+              <option value="{{ type.name }}">{{ type.name }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+    </form>
+
+     <hr />
+<div class="container">
+      <div class="row">
+
+          {% for room in rooms %}
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ room.type.name }}</h6>
+                    <p class="card-text">{{ room.building.name }}</p>
+                    <a href="{% url 'rezerwacje:room_detail' pk=room.pk%}" class="btn btn-primary " role="button" aria-pressed="true">Show more</a>
+                    {% if room.available %}
+                        <a href="{% url 'rezerwacje:disable_room' pk=room.id %}" class="btn btn-danger" role="button" >Disable room</a>
+
+                    {% else %}
+                        <a href="{% url 'rezerwacje:enable_room' pk=room.id %}" class="btn btn-success" role="button" >Enable_room</a>
+                    {% endif %}
+                </div>
+              </div>
+          {% empty %}
+             Sorry, but there are currently no available rooms for your needs
+          {% endfor %}
+
+      </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+    {% load crispy_forms_tags %}
+    <h2>Write why you rejected reservation</h2>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Confirm</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends '../base.html' %}
+
+{% block content %}
+    <h3>Filter rooms</h3>
+    <p>Before you start searching room please select from when to when you want to book a room. The rest of the options are optional</p>
+    <form method="get" action=".">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="name" placeholder="Room name" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="AmountPeople">Amount of people</label>
+            <input type="number" min=0 class="form-control" id="AmountPeople" placeholder="0" name="amountPeople">
+          </div>
+
+          <div class="form-group col-md-3 col-lg-3">
+            <label for="startReservation">From..</label>
+            <input type="datetime-local" class="form-control" id="startReservation" name="dateStart">
+          </div>
+          <div class="form-group col-md-3 col-lg-3">
+            <label for="endReservation">..to..</label>
+            <input type="datetime-local" class="form-control" id="endReservation" name="dateEnd">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="building">in Building</label>
+            <select id="building" class="form-control" name="building">
+              <option selected>Choose...</option>
+              {% for building in buildings %}
+              <option value="{{ building.name }}">{{ building.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+
+            <div class="form-group col-md-4">
+            <label for="equipment">Equipment</label>
+            <select id="equipment" class="form-control" name="equipment">
+              <option selected>Choose...</option>
+              {% for equipment in equipments %}
+              <option value="{{ equipment.name }}">{{ equipment.name }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+            <div class="form-group col-md-4">
+            <label for="software">Software</label>
+            <select id="software" class="form-control" name="software">
+              <option selected>Choose...</option>
+              {% for software in softwares %}
+              <option value="{{ software.name }}">{{ software.name }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+            <div class="form-group col-md-4">
+            <label for="type">Room type</label>
+            <select id="type" class="form-control" name="room_type">
+              <option selected>Choose...</option>
+              {% for type in types %}
+              <option value="{{ type.name }}">{{ type.name }}</option>
+              {% endfor %}
+            </select>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+    </form>
+
+     <hr />
+        {% if date_start and date_end %}
+
+<div class="container">
+    <div class="row">
+
+          {% for room in queryset %}
+            <div class="col col-md-3">
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ room.type.name }}</h6>
+                    <p class="card-text">{{ room.building.name }}</p>
+                    <a href="{% url 'rezerwacje:room_detail' pk=room.pk%}" class="btn btn-primary " role="button" aria-pressed="true">Show more</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'rezerwacje:reservation_new' pk=room.pk start=date_start end=date_end %}" class="btn btn-primary " role="button" aria-pressed="true">Reserve</a>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+          {% empty %}
+             Sorry, but there are currently no available rooms for your needs
+          {% endfor %}
+</div>
+      </div>
+
+
+        {% else %}
+            Please select date end and start
+
+
+        {% endif %}
+{% endblock %}

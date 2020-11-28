@@ -1,0 +1,51 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Manage reservations</h1>
+  </div>
+</div>
+
+    <a href="{% url 'rezerwacje:my_reservation'%}" class="btn btn-primary btn-lg" role="button" disabled="true" >Manage your reservations</a>
+    {% if room_keeper %}
+        <a href="{% url 'rezerwacje:room_keeper_management'%}" class="btn btn-primary btn-lg" role="button" disabled="true" >Roomkeeper panel</a>
+    {% endif %}
+    {% if coordinator %}
+        <a href="{% url 'rezerwacje:coordinator_management'%}" class="btn btn-primary btn-lg" role="button" disabled="true" >Builiding coordinator panel</a>
+    {% endif %}
+     <hr />
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your waiting reservations</h5>
+        <p class="card-text">You have {{ reservation_waiting }} waiting reservations</p>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your rejected reservations</h5>
+        <p class="card-text">You have {{ reservation_rejected }} rejected reservations</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your accepted reservations</h5>
+        <p class="card-text">You have {{ reservation_accepted }} accepted reservations</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+     <hr />
+
+{% endblock %}
